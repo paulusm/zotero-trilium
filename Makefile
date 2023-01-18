@@ -11,14 +11,14 @@ mdnotes.xpi: FORCE
 	yarn build
 	zip -r $@ content chrome.manifest defaults locale skin install.rdf update.rdf -x \*.DS_Store
 
-mdnotes-%-fx.xpi: mdnotes.xpi
+mdnotes-%-fx.xpi: zotero-trilium.xpi
 	mv $< $@
 
 Makefile.in: install.rdf
-	echo "all: mdnotes-${RELEASE}-fx.xpi" > Makefile.in
+	echo "all: zotero-trilium-${RELEASE}-fx.xpi" > Makefile.in
 
 release: mdnotes.xpi
-	@mv $< mdnotes-$(RELEASE).xpi
+	@mv $< zotero-trilium-$(RELEASE).xpi
 	# Replace old version with new version in install.rdf and update.rdf
 	sed -i 's/${PREVRELEASE}/${RELEASE}/g' install.rdf
 	sed -i 's/${PREVRELEASE}/${RELEASE}/g' update.rdf

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
-    <em:name>Mdnotes for Zotero</em:name>
-    <em:description>Export Zotero items and notes to markdown</em:description>
-    <em:id>mdnotes@mdnotes.github.io</em:id>
-    <em:version>0.2.3</em:version>
-    <em:homepageURL>https://github.com/argenos/zotero-mdnotes</em:homepageURL>
-    <em:creator>A. Ortega</em:creator>
-    <em:updateURL>https://raw.githubusercontent.com/argenos/zotero-mdnotes/master/update.rdf</em:updateURL>
+    <em:name>Zotero-Trilium</em:name>
+    <em:description>Export Zotero Citations and Notes to Trilium Notes</em:description>
+    <em:id>trilium@jellytussle.org</em:id>
+    <em:version>0.0.1</em:version>
+    <em:homepageURL>https://github.com/paulusm/zotero-trilium</em:homepageURL>
+    <em:creator>Paul Matthews</em:creator>
+    <em:updateURL>https://www.jellytussle.org/zotero-trilium/master/update.rdf</em:updateURL>
     <em:type>2</em:type>
     <em:targetApplication>
       <Description>
