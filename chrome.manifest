@@ -1,6 +1,5 @@
-content	mdnotes				content/
-locale	mdnotes	en-US		locale/en-US/
-locale mdnotes zh-CN locale/zh-CN/
-skin	mdnotes	default		skin/
+content	zotero-trilium				content/
+locale	zotero-trilium	en-GB		locale/en-GB/
+skin	zotero-trilium	default		skin/
 
-overlay	chrome://zotero/content/zoteroPane.xul	chrome://mdnotes/content/overlay.xul
+overlay	chrome://zotero/content/zoteroPane.xul	chrome://zotero-trilium/content/overlay.xul

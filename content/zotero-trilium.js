@@ -820,8 +820,8 @@ function sanitizeFilename(filename, replacement = '') {
   return filename.replace(/[\/\?<>\\:\*\|"]/g, replacement).trim()
 }
 
-Zotero.Mdnotes =
-  Zotero.Mdnotes ||
+Zotero.ZoteroTrilium =
+  Zotero.ZoteroTrilium ||
   new (class {
     async openPreferenceWindow(paneID, action) {
       const io = {
@@ -829,8 +829,8 @@ Zotero.Mdnotes =
         action,
       };
       window.openDialog(
-        "chrome://mdnotes/content/options.xul",
-        "mdnotes-options",
+        "chrome://zotero-trilium/content/options.xul",
+        "zotero-trilium-options",
         "chrome,titlebar,toolbar,centerscreen" +
           Zotero.Prefs.get("browser.preferences.instantApply", true)
           ? "dialog=no"
@@ -882,7 +882,7 @@ Zotero.Mdnotes =
     }
 
     setPref(pref_name, value) {
-      Zotero.Prefs.set(`extensions.mdnotes.${pref_name}`, value, true);
+      Zotero.Prefs.set(`extensions.zotero-trilium.${pref_name}`, value, true);
     }
 
     async addLinkToMDNote(outputFile, item) {

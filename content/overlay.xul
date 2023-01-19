@@ -1,38 +1,25 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://mdnotes/skin/overlay.css" type="text/css"?>
-<!DOCTYPE overlay SYSTEM "chrome://mdnotes/locale/mdnotes.dtd">
+<?xml-stylesheet href="chrome://zotero-trilium/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://zotero-trilium/locale/zotero-trilium.dtd">
 
-<overlay id="mdnotes-overlay"
+<overlay id="zotero-trilium-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <stringbundleset>
-    <stringbundle id="mdnotes-bundle" src="chrome://mdnotes/locale/mdnotes.properties"/>
-  </stringbundleset>
-
   <popup id="zotero-itemmenu">
-    <menuseparator id="id-mdnotes-separator"/>
-    <menu id="id-mdnotes-menu" label="Mdnotes">
-      <menupopup id="id-mdnotes-menupopup" onpopupshowing="Zotero.Mdnotes.updateMenus()">
-        <menuitem id="id-mdnotes-export-item" label="&mdnotes-overlay-export-item-label;" tooltiptext="&mdnotes-overlay-export-item-tooltiptext;" oncommand="Zotero.Mdnotes.run('exportToMarkdownMenu')"/>
-        <menuseparator id="id-mdnotes-menu-separator"/>
-        <menuitem id="id-mdnotes-single-file-export" label="&mdnotes-overlay-single-file-export-label;" tooltiptext="&mdnotes-overlay-export-item-tooltiptext;" oncommand="Zotero.Mdnotes.run('batchExportMenu')"/>
-        <menuitem id="id-mdnotes-batch-export-item" label="&mdnotes-overlay-batch-export-item-label;" tooltiptext="&mdnotes-overlay-batch-export-item-tooltiptext;" oncommand="Zotero.Mdnotes.run('batchExportMenu')"/>
-        <menuitem id="id-mdnotes-create-notes-file" label="&mdnotes-overlay-create-notes-file-label;" tooltiptext="&mdnotes-overlay-create-notes-file-tooltiptext;" oncommand="Zotero.Mdnotes.run('createNoteFileMenu', false)"/>
-        <menuitem id="id-mdnotes-create-standalone-note-file" label="&mdnotes-overlay-create-standalone-note-file-label;" tooltiptext="&mdnotes-overlay-create-standalone-note-file-tooltiptext;" oncommand="Zotero.Mdnotes.run('createNoteFileMenu', true)"/>
-      </menupopup>
-    </menu>
+    <menuseparator id="id-zotero-trilium-separator"/>
+    <menuitem id="id-zotero-trilium-menu" label="Export to Trilium" oncommand="Zotero.ZoteroTrilium.run('exportToTrilium')"/>
   </popup>
 
   <menupopup id="zotero-tb-actions-popup">
-    <menuitem id="mdnotes-options" insertafter="zotero-tb-actions-prefs" label="&mdnotes-options.label;" oncommand="Zotero.Mdnotes.openPreferenceWindow();"/>
+    <menuitem id="zotero-trilium-options" insertafter="zotero-tb-actions-prefs" label="&zotero-trilium-options.label;" oncommand="Zotero.ZoteroTrilium.openPreferenceWindow();"/>
   </menupopup>
 
   <menupopup id="menu_ToolsPopup">
-    <menuitem id="mdnotes-options" insertafter="menu_preferences" label="&mdnotes-options.label;" oncommand="Zotero.Mdnotes.openPreferenceWindow();"/>
+    <menuitem id="zotero-trilium-options" insertafter="menu_preferences" label="&zotero-trilium-options.label;" oncommand="Zotero.ZoteroTrilium.openPreferenceWindow();"/>
   </menupopup>
 
   <!-- Include the main extension logic -->
   <script src="chrome://zotero/content/include.js"/>
-  <script type="application/x-javascript" src="chrome://mdnotes/content/mdnotes.js"/>
-  <script type="application/x-javascript" src="chrome://mdnotes/content/markdown-utils.js"/>
+  <script type="application/x-javascript" src="chrome://zotero-trilium/content/zotero-trilium.js"/>
+  <script type="application/x-javascript" src="chrome://zotero-trilium/content/markdown-utils.js"/>
 </overlay>
