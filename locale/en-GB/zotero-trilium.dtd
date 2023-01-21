@@ -3,6 +3,8 @@
 
 <!-- First tab -->
 <!ENTITY zotero-trilium-tablabel "Items">
+<!ENTITY zotero-trilium-url-label "Trilium ETAPI Address:">
+<!ENTITY zotero-trilium-url-description "The full URL to your Trilum installation, followed by "etapi" e.g. http://192.168.0.1:8080/etapi">
 <!ENTITY zotero-trilium-key-label "ETAPI Token:">
 <!ENTITY zotero-trilium-key-description "The Trilium API Token (See Options > ETAPI to create)">
 <!ENTITY zotero-trilium-parent-label "Parent Note ID">
@@ -17,11 +19,3 @@
 <!-- onerlay -->
 <!ENTITY zotero-trilium-overlay-export-item-label "Export to Trilium">
 <!ENTITY zotero-trilium-overlay-export-item-tooltiptext "Export the selected items to Trilium">
-<!ENTITY zotero-trilium-overlay-single-file-export-label "Create full export note">
-<!ENTITY zotero-trilium-overlay-export-item-tooltiptext "Export an item's metadata and notes as a single file">
-<!ENTITY zotero-trilium-overlay-batch-export-item-label "Batch export to markdown">
-<!ENTITY zotero-trilium-overlay-batch-export-item-tooltiptext "Create all markdown files for the selected items">
-<!ENTITY zotero-trilium-overlay-create-notes-file-label "Create zotero-trilium file">
-<!ENTITY zotero-trilium-overlay-create-notes-file-tooltiptext "Create a markdown file for your notes">
-<!ENTITY zotero-trilium-overlay-create-standalone-note-file-label "Create a standalone note">
-<!ENTITY zotero-trilium-overlay-create-standalone-note-file-tooltiptext "Create a standalone markdown note">

@@ -19,6 +19,15 @@
         <tabpanel>
           <!-- General export settings -->
           <vbox>
+
+            <hbox align="center">
+              <label id="id-zotero-trilium-url-label" value="&zotero-trilium-url-label;" control="id-zotero-trilium-vault-path" />
+              <textbox id="id-zotero-trilium-url-string" preference="pref-zotero-trilium-url" flex="1" />
+             </hbox>
+            <description style="font-size: 10px">
+              &zotero-trilium-url-description;
+            </description>
+            <separator />
            
             <hbox align="center">
               <label id="id-zotero-trilium-key-label" value="&zotero-trilium-key-label;" control="id-zotero-trilium-vault-path" />
