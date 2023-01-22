@@ -29,7 +29,7 @@ function getZoteroLink(item){
           break;
   }
 
-return 'zotero://select/' + path + '/items/'+ item.key;
+  return 'zotero://select/' + path + '/items/'+ item.key;
 }
 
 function getZoteroURI(item){
@@ -88,9 +88,10 @@ Zotero.ZoteroTrilium =
       // Add refs
       var style = Zotero.Styles.get('http://www.zotero.org/styles/apa');
 		  var cslEngine = style.getCiteProc('en-GB', 'html');
-      noteContent += "<br/><br/>" + Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html") +
-        "<br/>" + getZoteroLink(noteParent) + 
-        "<br/>" + getZoteroURI(noteParent);
+      noteContent += encodeURIComponent(Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, [noteParent], "html")) +
+         + getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
+
+      Zotero.debug(noteContent);
       
 
       const etapiToken = getPref('etapi_key');
@@ -110,7 +111,7 @@ Zotero.ZoteroTrilium =
           Zotero.debug(e.message);
         }
 
-      Zotero.debug(xhr.status);
+      if(xhr) Zotero.debug(xhr.status);
      
     }
 
