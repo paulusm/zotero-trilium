@@ -4,7 +4,7 @@
 <!-- First tab -->
 <!ENTITY zotero-trilium-tablabel "Items">
 <!ENTITY zotero-trilium-url-label "Trilium ETAPI Address:">
-<!ENTITY zotero-trilium-url-description "The full URL to your Trilum installation, followed by "etapi" e.g. http://192.168.0.1:8080/etapi">
+<!ENTITY zotero-trilium-url-description "The full URL to your Trilum installation, followed by 'etapi' e.g. http://192.168.0.1:8080/etapi">
 <!ENTITY zotero-trilium-key-label "ETAPI Token:">
 <!ENTITY zotero-trilium-key-description "The Trilium API Token (See Options > ETAPI to create)">
 <!ENTITY zotero-trilium-parent-label "Parent Note ID">

@@ -7,6 +7,7 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <prefpane label="&zotero-trilium-prefpane;" id="zotero-trilium-prefpane">
     <preferences>
+      <preference id="pref-zotero-trilium-etapi-url" name="extensions.zotero-trilium.etapi_url" type="string" />
       <preference id="pref-zotero-trilium-etapi-key" name="extensions.zotero-trilium.etapi_key" type="string" />
       <preference id="pref-zotero-trilium-parent-note-id" name="extensions.zotero-trilium.parent_note_id" type="string" />
     </preferences>
@@ -22,7 +23,7 @@
 
             <hbox align="center">
               <label id="id-zotero-trilium-url-label" value="&zotero-trilium-url-label;" control="id-zotero-trilium-vault-path" />
-              <textbox id="id-zotero-trilium-url-string" preference="pref-zotero-trilium-url" flex="1" />
+              <textbox id="id-zotero-trilium-url-string" preference="pref-zotero-trilium-etapi-url" flex="1" />
              </hbox>
             <description style="font-size: 10px">
               &zotero-trilium-url-description;

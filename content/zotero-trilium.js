@@ -1,244 +1,7 @@
 /*globals Zotero, OS, require, Components, window */
 
-
 function getPref(pref_name) {
   return Zotero.Prefs.get(`extensions.zotero-trilium.${pref_name}`, true);
-}
-
-
-function getDateAdded(item) {
- const date = new Date(item.getField("dateAdded"));
- return simpleISODate(date)
-}
-
-function getCiteKey(item) {
-  if (typeof Zotero.BetterBibTeX === "object" && Zotero.BetterBibTeX !== null) {
-    var bbtItem = Zotero.BetterBibTeX.KeyManager.get(item.getField("id"));
-    return bbtItem.citekey;
-  }
-
-  return "undefined";
-}
-
-function getLocalZoteroLink(item) {
-  let linksString = "zotero://select/items/";
-  const library_id = item.libraryID ? item.libraryID : 0;
-  linksString += `${library_id}_${item.key}`;
-
-  return linksString;
-}
-
-function getCloudZoteroLink(item) {
-  return `${Zotero.URI.getItemURI(item)}`;
-}
-
-function getDOI(item) {
-  let doi = item.getField("DOI");
-  if (doi) {
-    return `[${doi}](https://doi.org/${doi})`;
-  } else {
-    return doi;
-  }
-}
-
-function getURL(item) {
-  let url = item.getField("url");
-  if (url) {
-    return `[${url}](${url})`;
-  } else {
-    return url;
-  }
-}
-
-function getTags(item) {
-  const tagsArray = [];
-  var itemTags = item.getTags();
-
-  if (itemTags) {
-    for (const tag of itemTags) {
-      tagsArray.push(tag.tag);
-    }
-  }
-
-  return tagsArray;
-}
-
-function getCollectionNames(item) {
-  const collectionArray = [];
-  var collections = item.getCollections();
-
-  for (let collectionID of collections) {
-    var collection = Zotero.Collections.get(collectionID);
-    collectionArray.push(collection.name);
-  }
-
-  return collectionArray;
-}
-
-
-function getCreatorArray(item, creatorType) {
-  var creators = item.getCreators();
-  var creatorTypeID = Zotero.CreatorTypes.getID(creatorType);
-  var creatorArray = [];
-
-  if (creators) {
-    for (let creator of creators) {
-      if (creator.creatorTypeID === creatorTypeID) {
-        let creatorName = `${creator.firstName} ${creator.lastName}`;
-        creatorArray.push(creatorName);
-      }
-    }
-  }
-  return creatorArray;
-}
-
-function getItemMetadata(item) {
-  let metadata = {};
-  let fields = Zotero.ItemFields.getItemTypeFields(item.getField("itemTypeID"));
-  var zoteroType = Zotero.ItemTypes.getName(item.getField("itemTypeID"));
-  let creatorTypes = Zotero.Utilities.getCreatorsForType(zoteroType);
-
-  for (let creatorType of creatorTypes) {
-    let creatorArray = getCreatorArray(item, creatorType);
-    metadata[creatorType] = creatorArray;
-  }
-
-  for (let x of fields) {
-    let field = Zotero.ItemFields.getName(x);
-    let content = item.getField(field, false, true);
-    if (field === "DOI") {
-      content = getDOI(item);
-    } else if (field === "url") {
-      content = getURL(item);
-    } else if (field === "dateAdded") {
-      content = simpleISODate(content);
-    }
-    metadata[field] = content;
-  }
-  metadata.itemType = typemap[zoteroType];
-  metadata.citekey = getCiteKey(item);
-  metadata.collections = getCollectionNames(item);
-  metadata.related = getRelatedItems(item);
-  metadata.tags = getTags(item);
-  metadata.pdfAttachments = getZoteroAttachments(item);
-  metadata.localLibrary = getLocalZoteroLink(item);
-  metadata.cloudLibrary = getCloudZoteroLink(item);
-  metadata.dateAdded = getDateAdded(item);
-  metadata.notes = getZoteroNoteTitles(item);
-  metadata.mdnotesFileName = getMDNoteFileName(item);
-  metadata.metadataFileName = getZMetadataFileName(item);
-
-  return metadata;
-}
-
-function formatInternalLink(content, linkStyle) {
-  linkStyle =
-    typeof linkStyle !== "undefined" ? linkStyle : getPref("link_style");
-
-  if (linkStyle === "wiki") {
-    return `[[${content}]]`;
-  } else if (linkStyle === "markdown") {
-    return `[${content}](${lowerCaseDashTitle(content)})`;
-  } else {
-    return `${content}`;
-  }
-}
-
-function lowerCaseDashTitle(content) {
-  return content.replace(/\s+/g, "-").toLowerCase();
-}
-
-function getZoteroNotes(item) {
-  var noteIDs = item.getNotes();
-  var noteArray = [];
-
-  if (noteIDs) {
-    for (let noteID of noteIDs) {
-      let note = Zotero.Items.get(noteID);
-      noteArray.push(note);
-    }
-  }
-
-  return noteArray;
-}
-
-function getZoteroPDFLink(attachment) {
-  return `zotero://open-pdf/library/items/${attachment.key}`;
-}
-
-function getPDFFileLink(attachment) {
-  let fileLink = Zotero.File.pathToFileURI(attachment.getFilePath());
-  return fileLink;
-}
-
-function getZoteroAttachments(item) {
-  const linkStylePref = getPref("pdf_link_style");
-  let attachmentIDs = item.getAttachments();
-  var linksArray = [];
-  for (let id of attachmentIDs) {
-    let attachment = Zotero.Items.get(id);
-    if (attachment.attachmentContentType == "application/pdf") {
-      let link;
-      if (linkStylePref === "zotero") {
-        link = `[${attachment.getField("title")}](${getZoteroPDFLink(attachment)})`;
-      } else if (linkStylePref === "wiki") {
-        link = formatInternalLink(attachment.getField("title"), "wiki");
-      } else {
-        link = `[${attachment.getField("title")}](${getPDFFileLink(attachment)})`;
-      }
-      linksArray.push(link);
-    }
-  }
-  return linksArray;
-}
-
-// Hacky solution from https://stackoverflow.com/a/25047903
-var isDate = function (date) {
-  return new Date(date).toString() !== "Invalid Date" && !isNaN(new Date(date));
-};
-
-// From https://stackoverflow.com/a/29774197
-// Return the date in yyyy-mm-dd format
-function simpleISODate(date) {
-  const offset = date.getTimezoneOffset();
-  date = new Date(date.getTime() + offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
-}
-
-function formatNoteTitle(titleString) {
-  var strInParenthesis = titleString.match(/\(([^\)]+)\)/g);
-
-  if (!strInParenthesis) {
-    // Just replace all slashes and colons with dashes
-    return titleString.replace(/\/|:/g, "-");
-  } else {
-    var dateInParenthesis = strInParenthesis[0].replace(/\(|\)/g, "");
-
-    if (isDate(dateInParenthesis)) {
-      var date = new Date(dateInParenthesis);
-      return titleString.replace(dateInParenthesis, simpleISODate(date));
-    } else {
-      return titleString;
-    }
-  }
-}
-
-
-/**
- * Return file names for an array of notes based on the naming convention
- *
- * @param {object} item A Zotero item
- */
-function getZoteroNoteTitles(item) {
-  let noteTitleArray = [];
-  let noteArray = getZoteroNotes(item);
-
-  for (let note of noteArray) {
-    let noteFileName = getZNoteFileName(note);
-    noteTitleArray.push(noteFileName);
-  }
-
-  return noteTitleArray;
 }
 
 function getParentItem(item) {
@@ -251,6 +14,34 @@ function getParentItem(item) {
   }
 
   return parentItem;
+}
+
+function getZoteroLink(item){
+
+  libraryType = Zotero.Libraries.get(item.libraryID).libraryType
+
+  switch (libraryType) {
+      case 'group':
+          path = Zotero.URI.getLibraryPath(item.libraryID)
+          break;
+      case 'user':
+          path = 'library'
+          break;
+  }
+
+return 'zotero://select/' + path + '/items/'+ item.key;
+}
+
+function getZoteroURI(item){
+  var link
+
+    link = Zotero.URI.getItemURI(item)
+    if (link.startsWith(ZOTERO_CONFIG.BASE_URI)) {
+        link = (ZOTERO_CONFIG.WWW_BASE_URL +
+                link.slice(ZOTERO_CONFIG.BASE_URI.length))
+    }
+    return link;
+
 }
 
 Zotero.ZoteroTrilium =
@@ -272,46 +63,55 @@ Zotero.ZoteroTrilium =
       );
     }
 
-    updateMenus() {
-      // Follow Zotfile's example:
-      // https://github.com/jlegewie/zotfile/blob/master/chrome/content/zotfile/ui.js#L190
-      let win = Services.wm.getMostRecentWindow("navigator:browser");
-      let menu = win.ZoteroPane.document.getElementById("id-mdnotes-menupopup");
+    async exportToTrilium(){
+      var items = Zotero.getActiveZoteroPane()
+        .getSelectedItems()
+        .filter(
+          (item) => Zotero.ItemTypes.getName(item.itemTypeID) !== "attachment"
+        );
+      await Zotero.Schema.schemaUpdatePromise;
 
-      // This is the order in which menuitems are added in overlay.xul
-      let items = {
-        mdexport: 0,
-        separator: 1,
-        single: 2,
-        batch: 3,
-        mdnotes: 4,
-        standalone: 5,
-      };
+      var noteContent = '';
+      var noteTitle = '';
+      var noteParent = '';
 
-      let disableItems = [];
+      var item = items[0];
+      noteParent = getParentItem(item);
+      noteTitle = noteParent.getField("title");
+      if (item && !item.isNote()) {
+        Zotero.debug("Exporting a regular Zotero item");
+      } else if (item && item.isNote()) {
+        Zotero.debug("Exporting a Zotero note");    
+        noteContent += item.getNote();
+      } 
 
-      if (getPref("file_conf") === "split") {
-        disableItems.push(items.single);
-      } else {
-        disableItems.push(items.batch);
-        disableItems.push(items.mdnotes);
-      }
+      // Add refs
+      var style = Zotero.Styles.get('http://www.zotero.org/styles/apa');
+		  var cslEngine = style.getCiteProc('en-GB', 'html');
+      noteContent += "<br/><br/>" + Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html") +
+        "<br/>" + getZoteroLink(noteParent) + 
+        "<br/>" + getZoteroURI(noteParent);
+      
 
-      if (!getPref("standalone_menu")) {
-        disableItems.push(items.standalone)
-      }
+      const etapiToken = getPref('etapi_key');
+      const etapiUrl = getPref('etapi_url') + '/create-note';
+      const parentNote = getPref('parent_note_id');
 
-      // Enable all items by default and make them visible
-      for (let i = 0; i < menu.childNodes.length; i++) {
-        menu.childNodes[i].setAttribute("disabled", false);
-        menu.childNodes[i].setAttribute("hidden", false);
-      }
+      let rBody = `type=text&title=${noteTitle}&content=${noteContent}&parentNoteId=${parentNote}`;
 
-      // Hide and disable menus based on the single vs split files
-      for (let i in disableItems) {
-        menu.childNodes[disableItems[i]].setAttribute("disabled", true);
-        menu.childNodes[disableItems[i]].setAttribute("hidden", true);
-      }
+      let rHeaders = { Authorization: `${etapiToken}`};
+	    let rOptions = { headers: rHeaders, body: rBody, timeout: 60000 };
+
+      let xhr;
+        try {
+          xhr = await Zotero.HTTP.request('POST', etapiUrl, rOptions);
+        }
+        catch (e) {
+          Zotero.debug(e.message);
+        }
+
+      Zotero.debug(xhr.status);
+     
     }
 
     setPref(pref_name, value) {
