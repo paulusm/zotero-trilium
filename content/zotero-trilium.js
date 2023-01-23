@@ -18,7 +18,10 @@ function getParentItem(item) {
 
 function getZoteroLink(item){
 
-  libraryType = Zotero.Libraries.get(item.libraryID).libraryType
+  var libraryType
+  var path
+
+  libraryType = Zotero.Libraries.get(item).libraryType
 
   switch (libraryType) {
       case 'group':
@@ -27,9 +30,12 @@ function getZoteroLink(item){
       case 'user':
           path = 'library'
           break;
+      default:
+          // Feeds?
+          continue
   }
 
-  return 'zotero://select/' + path + '/items/'+ item.key;
+      return 'zotero://select/' + path + '/items/'+ item.key
 }
 
 function getZoteroURI(item){
@@ -64,6 +70,7 @@ Zotero.ZoteroTrilium =
     }
 
     async exportToTrilium(){
+      var ps = Services.prompt;
       var items = Zotero.getActiveZoteroPane()
         .getSelectedItems()
         .filter(
@@ -109,6 +116,7 @@ Zotero.ZoteroTrilium =
         }
         catch (e) {
           Zotero.debug(e.message);
+          ps.alert(null, "Zotero-Trilium", e.message);
         }
 
       if(xhr) Zotero.debug(xhr.status);

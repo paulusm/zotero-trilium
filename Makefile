@@ -3,15 +3,15 @@ all: Makefile.in
 -include Makefile.in
 
 # RELEASE:=$(shell grep em:version install.rdf | head -n 1 | sed -e 's/ *<em:version>//' -e 's/<\/em:version>//')
-RELEASE:=$(shell git tag --sort version:refname | tail -n 1)
-PREVRELEASE:=$(shell git tag --sort version:refname | tail -n 2 | head -n 1)
+RELEASE:=0.0.1
+PREVRELEASE:=0.0.1
 
-mdnotes.xpi: FORCE
+zotero-trilium.xpi: FORCE
 	rm -rf $@
 	yarn build
 	zip -r $@ content chrome.manifest defaults locale skin install.rdf update.rdf -x \*.DS_Store
 
-mdnotes-%-fx.xpi: zotero-trilium.xpi
+zotero-trilium-%-fx.xpi: zotero-trilium.xpi
 	mv $< $@
 
 Makefile.in: install.rdf
@@ -20,11 +20,11 @@ Makefile.in: install.rdf
 release: mdnotes.xpi
 	@mv $< zotero-trilium-$(RELEASE).xpi
 	# Replace old version with new version in install.rdf and update.rdf
-	sed -i 's/${PREVRELEASE}/${RELEASE}/g' install.rdf
-	sed -i 's/${PREVRELEASE}/${RELEASE}/g' update.rdf
+	#sed -i 's/${PREVRELEASE}/${RELEASE}/g' install.rdf
+	#sed -i 's/${PREVRELEASE}/${RELEASE}/g' update.rdf
 	# Show commits between the last two tags
 	# @echo "\nChangelog\n------------"
-	@git log --pretty=format:"%s" $(PREVRELEASE)..$(RELEASE) > changelog.md
+	#@git log --pretty=format:"%s" $(PREVRELEASE)..$(RELEASE) > changelog.md
 
 clean:
 	rm -rf *.xpi
