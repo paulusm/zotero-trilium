@@ -18,24 +18,7 @@ function getParentItem(item) {
 
 function getZoteroLink(item){
 
-  var libraryType
-  var path
-
-  libraryType = Zotero.Libraries.get(item).libraryType
-
-  switch (libraryType) {
-      case 'group':
-          path = Zotero.URI.getLibraryPath(item.libraryID)
-          break;
-      case 'user':
-          path = 'library'
-          break;
-      default:
-          // Feeds?
-          continue
-  }
-
-      return 'zotero://select/' + path + '/items/'+ item.key
+  return 'zotero://select/library/items/'+ item.key
 }
 
 function getZoteroURI(item){
