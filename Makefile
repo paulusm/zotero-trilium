@@ -11,11 +11,11 @@ zotero-trilium.xpi: FORCE
 	yarn build
 	zip -r $@ content chrome.manifest defaults locale skin install.rdf update.rdf -x \*.DS_Store
 
-zotero-trilium-%-fx.xpi: zotero-trilium.xpi
+zotero-trilium-%.xpi: zotero-trilium.xpi
 	mv $< $@
 
 Makefile.in: install.rdf
-	echo "all: zotero-trilium-${RELEASE}-fx.xpi" > Makefile.in
+	echo "all: zotero-trilium-${RELEASE}.xpi" > Makefile.in
 
 release: mdnotes.xpi
 	@mv $< zotero-trilium-$(RELEASE).xpi

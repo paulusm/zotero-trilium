@@ -17,8 +17,20 @@ function getParentItem(item) {
 }
 
 function getZoteroLink(item){
+  var libraryType
+  var path
+  
+  libraryType = Zotero.Libraries.get(item.libraryID).libraryType
 
-  return 'zotero://select/library/items/'+ item.key
+  switch (libraryType) {
+      case 'group':
+          path = Zotero.URI.getLibraryPath(item.libraryID)
+          break;
+      case 'user':
+          path = 'library'
+          break;
+  }
+  return 'zotero://select/'+path+'/items/'+ item.key;
 }
 
 function getZoteroURI(item){
@@ -79,7 +91,7 @@ Zotero.ZoteroTrilium =
       var style = Zotero.Styles.get('http://www.zotero.org/styles/apa');
 		  var cslEngine = style.getCiteProc('en-GB', 'html');
       noteContent += encodeURIComponent(Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, [noteParent], "html")) +
-         + getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
+         getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
 
       Zotero.debug(noteContent);
       
