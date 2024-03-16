@@ -2,6 +2,12 @@
 
 A Zotero plugin to export references and notes to [Trilium Notes](https://github.com/zadam/trilium)
 
+## Installation
+
+Download the latest [release](https://github.com/paulusm/zotero-trilium/releases).
+
+In Zotero, go to Tools > Add-ons. From the top right menu, choose Install Add-in from File and navigate to the location of the XPI file.
+
 ## Settings
 
 Set in Zotero Tools > Zotero-Trilium menu
