@@ -3,7 +3,7 @@ all: Makefile.in
 -include Makefile.in
 
 # RELEASE:=$(shell grep em:version install.rdf | head -n 1 | sed -e 's/ *<em:version>//' -e 's/<\/em:version>//')
-RELEASE:=0.0.1
+RELEASE:=0.0.2
 PREVRELEASE:=0.0.1
 
 zotero-trilium.xpi: FORCE
@@ -17,7 +17,7 @@ zotero-trilium-%.xpi: zotero-trilium.xpi
 Makefile.in: install.rdf
 	echo "all: zotero-trilium-${RELEASE}.xpi" > Makefile.in
 
-release: mdnotes.xpi
+release: zotero-trilium.xpi
 	@mv $< zotero-trilium-$(RELEASE).xpi
 	# Replace old version with new version in install.rdf and update.rdf
 	#sed -i 's/${PREVRELEASE}/${RELEASE}/g' install.rdf
