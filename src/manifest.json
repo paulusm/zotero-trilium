@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Zotero-Zrilium",
+    "name": "Zotero-Trilium",
     "version": "0.02",
     "description": "Send references and notes to Trilium Next",
     "author": "Paul Matthews",
@@ -11,8 +11,8 @@
     "applications": {
       "zotero": {
         "id": "zotero-trilium@jellytussle.org",
-        "update_url": "https://www.zotero.org/download/plugins/make-it-red/updates.json",
-        "strict_min_version": "7.0.*",
+        "update_url": "https://www.zotero.org/download/plugins/zotero-trilium/updates.json",
+        "strict_min_version": "6.999",
         "strict_max_version": "7.1.*"
       }
     }
