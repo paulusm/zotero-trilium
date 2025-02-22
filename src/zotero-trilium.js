@@ -1,54 +1,52 @@
-/*globals Zotero, OS, require, Components, window */
+ZoteroTrilium = {
 
-function getPref(pref_name) {
-  return Zotero.Prefs.get(`extensions.zotero-trilium.${pref_name}`, true);
-}
+    getPref(pref_name) {
+      return Zotero.Prefs.get(`extensions.zotero-trilium.${pref_name}`, true);
+    },
 
-function getParentItem(item) {
-  let parentItem;
+    getParentItem(item) {
+      let parentItem;
 
-  if (item.isNote()) {
-    parentItem = Zotero.Items.get(item.parentItemID);
-  } else {
-    parentItem = item;
-  }
+      if (item.isNote()) {
+        parentItem = Zotero.Items.get(item.parentItemID);
+      } else {
+        parentItem = item;
+      }
 
-  return parentItem;
-}
+      return parentItem;
+    },
 
-function getZoteroLink(item){
-  var libraryType
-  var path
-  
-  libraryType = Zotero.Libraries.get(item.libraryID).libraryType
+    getZoteroLink(item){
+      var libraryType
+      var path
+      
+      libraryType = Zotero.Libraries.get(item.libraryID).libraryType
 
-  switch (libraryType) {
-      case 'group':
-          path = Zotero.URI.getLibraryPath(item.libraryID)
-          break;
-      case 'user':
-          path = 'library'
-          break;
-  }
-  return 'zotero://select/'+path+'/items/'+ item.key;
-}
+      switch (libraryType) {
+          case 'group':
+              path = Zotero.URI.getLibraryPath(item.libraryID)
+              break;
+          case 'user':
+              path = 'library'
+              break;
+      }
+      return 'zotero://select/'+path+'/items/'+ item.key;
+    },
 
-function getZoteroURI(item){
-  var link
+    getZoteroURI(item){
+      var link
 
-    link = Zotero.URI.getItemURI(item)
-    if (link.startsWith(ZOTERO_CONFIG.BASE_URI)) {
-        link = (ZOTERO_CONFIG.WWW_BASE_URL +
-                link.slice(ZOTERO_CONFIG.BASE_URI.length))
-    }
-    return link;
+        link = Zotero.URI.getItemURI(item)
+        if (link.startsWith(ZOTERO_CONFIG.BASE_URI)) {
+            link = (ZOTERO_CONFIG.WWW_BASE_URL +
+                    link.slice(ZOTERO_CONFIG.BASE_URI.length))
+        }
+        return link;
 
-}
+    },
 
-Zotero.ZoteroTrilium =
-  Zotero.ZoteroTrilium ||
-  new (class {
-    async openPreferenceWindow(paneID, action) {
+
+    openPreferenceWindow(paneID, action) {
       const io = {
         pane: paneID,
         action,
@@ -62,9 +60,9 @@ Zotero.ZoteroTrilium =
           : "modal",
         io
       );
-    }
+    },
 
-    async exportToTrilium(){
+    async main(){
       var ps = Services.prompt;
       var items = Zotero.getActiveZoteroPane()
         .getSelectedItems()
@@ -89,9 +87,9 @@ Zotero.ZoteroTrilium =
 
       // Add refs
       var style = Zotero.Styles.get('http://www.zotero.org/styles/apa');
-		  var cslEngine = style.getCiteProc('en-GB', 'html');
+      var cslEngine = style.getCiteProc('en-GB', 'html');
       noteContent += encodeURIComponent(Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, [noteParent], "html")) +
-         getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
+        getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
 
       Zotero.debug(noteContent);
       
@@ -103,7 +101,7 @@ Zotero.ZoteroTrilium =
       let rBody = `type=text&title=${noteTitle}&content=${noteContent}&parentNoteId=${parentNote}`;
 
       let rHeaders = { Authorization: `${etapiToken}`};
-	    let rOptions = { headers: rHeaders, body: rBody, timeout: 60000 };
+      let rOptions = { headers: rHeaders, body: rBody, timeout: 60000 };
 
       let xhr;
         try {
@@ -115,17 +113,19 @@ Zotero.ZoteroTrilium =
         }
 
       if(xhr) Zotero.debug(xhr.status);
-     
-    }
+    
+    },
 
     setPref(pref_name, value) {
       Zotero.Prefs.set(`extensions.zotero-trilium.${pref_name}`, value, true);
-    }
+    },
 
 
     run(method, ...args) {
       this[method].apply(this, args).catch((err) => {
         Zotero.debug(err);
       });
-    }
-  })();
+    },
+
+
+};

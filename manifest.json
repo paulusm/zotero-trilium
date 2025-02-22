@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Zotero-Zrilium",
     "version": "0.02",
-    "description": "Send refs and notes to Trilium Next",
+    "description": "Send references and notes to Trilium Next",
     "author": "Paul Matthews",
     "icons": {
       "48": "icon.png",
