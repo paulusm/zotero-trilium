@@ -5,38 +5,34 @@ function log(msg) {
 }
 
 function install() {
-	log("Installed 0.02");
+	log("Installed ZT");
 }
 
 async function startup({ id, version, rootURI }) {
-	log("Starting 0.02");
 	
 	Zotero.PreferencePanes.register({
 		pluginID: 'zotero-trilium@jellytussle.org',
-		src: rootURI + 'preferences.xhtml',
-		scripts: [rootURI + 'preferences.js']
+		src: rootURI + 'content/options.xul'
 	});
 	
 	Services.scriptloader.loadSubScript(rootURI + 'zotero-trilium.js');
 	ZoteroTrilium.init({ id, version, rootURI });
-	ZoteroTrilium.addToAllWindows();
 	await ZoteroTrilium.main();
 }
 
 function onMainWindowLoad({ window }) {
-	ZoteroTrilium.addToWindow(window);
+	
 }
 
 function onMainWindowUnload({ window }) {
-	ZoteroTrilium.removeFromWindow(window);
+	
 }
 
 function shutdown() {
-	log("Shutting down 0.02");
-	ZoteroTrilium.removeFromAllWindows();
+	log("Shutting down ZT");
 	ZoteroTrilium = undefined;
 }
 
 function uninstall() {
-	log("Uninstalled 0.02");
+	log("Uninstalled ZT");
 }
