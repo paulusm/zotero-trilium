@@ -9,10 +9,13 @@ function install() {
 }
 
 async function startup({ id, version, rootURI }) {
+	log("Startup ZT");
 	
 	Zotero.PreferencePanes.register({
+		id: 'zotero-trilium',
 		pluginID: 'zotero-trilium@jellytussle.org',
-		src: rootURI + 'content/options.xul'
+		src: rootURI + 'content/options.xul',
+		scripts: [rootURI + 'prefs.js'],
 	});
 	
 	Services.scriptloader.loadSubScript(rootURI + 'zotero-trilium.js');

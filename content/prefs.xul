@@ -1,0 +1,52 @@
+<linkset>
+    <html:link rel="localization" href="zotero-trilium.ftl"/>
+</linkset>
+
+
+
+    <tabbox id="zotero-trilium-pref-tabs" selectedIndex="0">
+      <tabs>
+        <tab label="&zotero-trilium-tablabel;" />
+      </tabs>
+      <tabpanels>
+        <tabpanel>
+          <!-- General export settings -->
+          <vbox>
+
+            <hbox align="center">
+              <label id="id-zotero-trilium-url-label" data-l10n-id="zotero-trilium-url-label;" control="id-zotero-trilium-vault-path" />
+              <textbox id="id-zotero-trilium-url-string" preference="pref-zotero-trilium-etapi-url" flex="1" />
+             </hbox>
+            <description style="font-size: 10px">
+              &zotero-trilium-url-description;
+            </description>
+            <separator />
+           
+            <hbox align="center">
+              <label id="id-zotero-trilium-key-label" data-l10n-id="zotero-trilium-key-label;" control="id-zotero-trilium-vault-path" />
+              <textbox id="id-zotero-trilium-key-string" preference="pref-zotero-trilium-etapi-key" flex="1" />
+             </hbox>
+            <description style="font-size: 10px">
+              &zotero-trilium-key-description;
+            </description>
+            <separator />
+
+            <hbox align="center">
+              <label id="id-zotero-trilium-parent-label" data-l10n-id="zotero-trilium-parent-label;" control="id-zotero-trilium-vault-path" />
+              <textbox id="id-zotero-trilium-parent-string" preference="pref-zotero-trilium-parent-note-id" flex="1" />
+            </hbox>
+            <description style="font-size: 10px">
+              &zotero-trilium-parent-description;
+            </description>
+            <separator />
+            
+
+          </vbox>
+
+        </tabpanel>
+        
+        
+      </tabpanels>
+    </tabbox>
+
+
