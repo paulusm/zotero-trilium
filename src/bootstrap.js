@@ -14,17 +14,18 @@ async function startup({ id, version, rootURI }) {
 	Zotero.PreferencePanes.register({
 		id: 'zotero-trilium',
 		pluginID: 'zotero-trilium@jellytussle.org',
-		src: rootURI + 'content/options.xul',
-		scripts: [rootURI + 'prefs.js'],
+		src: rootURI + 'prefs.xul'
+		//scripts: [rootURI + 'prefs.js'],
 	});
 	
 	Services.scriptloader.loadSubScript(rootURI + 'zotero-trilium.js');
 	ZoteroTrilium.init({ id, version, rootURI });
-	await ZoteroTrilium.main();
+	ZoteroTrilium.addToAllWindows();
 }
 
 function onMainWindowLoad({ window }) {
-	
+	log("Window Load ZT");
+	ZoteroTrilium.addToWindow(window);
 }
 
 function onMainWindowUnload({ window }) {

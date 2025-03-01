@@ -1,6 +1,3 @@
-<?xml version="1.0"?>
-<?xml-stylesheet href="chrome://zotero-trilium/skin/overlay.css" type="text/css"?>
-<!DOCTYPE overlay SYSTEM "chrome://zotero-trilium/locale/zotero-trilium.dtd">
 
 <overlay id="zotero-trilium-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">

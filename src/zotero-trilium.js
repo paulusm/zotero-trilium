@@ -14,6 +14,36 @@ ZoteroTrilium = {
 		this.initialized = true;
 	},
 
+  addToWindow(win) {
+    let doc = win.document;
+    win.MozXULElement.insertFTLIfNeeded('zotero-trilium.ftl');
+
+    let menuseparator = doc.createXULElement('menuseparator');
+		
+    // Add menu option
+    let export_item = doc.createXULElement('menuitem');
+    export_item.id = 'zotero-trilium-menu-export-item-label';
+    export_item.setAttribute('label','Export to Trilium');
+    //export_item.setAttribute('data-l10n-id', 'zotero-trilium-menu-export-item-label');
+    export_item.addEventListener('command', () =>
+    {
+      ZoteroTrilium.main();
+    });
+
+    let zotero_itemmenu = doc.getElementById('zotero-itemmenu');
+
+    zotero_itemmenu.appendChild(menuseparator);
+    zotero_itemmenu.appendChild(export_item);
+  },
+
+  addToAllWindows() {
+		var windows = Zotero.getMainWindows();
+		for (let win of windows) {
+			if (!win.ZoteroPane) continue;
+			this.addToWindow(win);
+		}
+	},
+
   getPref(pref_name) {
     return Zotero.Prefs.get(`extensions.zotero-trilium.${pref_name}`, true);
   },
@@ -44,37 +74,23 @@ ZoteroTrilium = {
             path = 'library'
             break;
     }
-    return 'zotero://select/'+path+'/items/'+ item.key;
+    theLink = 'zotero://select/'+path+'/items/'+ item.key;
+    theRet = '<a href="' + theLink + '">' + theLink + '</a>';
+    return theRet;
   },
 
   getZoteroURI(item){
     var link
 
       link = Zotero.URI.getItemURI(item)
-      if (link.startsWith(ZOTERO_CONFIG.BASE_URI)) {
-          link = (ZOTERO_CONFIG.WWW_BASE_URL +
-                  link.slice(ZOTERO_CONFIG.BASE_URI.length))
-      }
+      // if (link.startsWith(ZOTERO_CONFIG.BASE_URI)) {
+      //     link = (ZOTERO_CONFIG.WWW_BASE_URL +
+      //             link.slice(ZOTERO_CONFIG.BASE_URI.length))
+      // }
       return link;
 
   },
 
-
-  openPreferenceWindow(paneID, action) {
-    const io = {
-      pane: paneID,
-      action,
-    };
-    window.openDialog(
-      "chrome://zotero-trilium/content/options.xul",
-      "zotero-trilium-options",
-      "chrome,titlebar,toolbar,centerscreen" +
-        Zotero.Prefs.get("browser.preferences.instantApply", true)
-        ? "dialog=no"
-        : "modal",
-      io
-    );
-  },
 
   async main(){
     var ps = Services.prompt;
@@ -84,13 +100,13 @@ ZoteroTrilium = {
         (item) => Zotero.ItemTypes.getName(item.itemTypeID) !== "attachment"
       );
     await Zotero.Schema.schemaUpdatePromise;
-
+    Zotero.debug(items);
     var noteContent = '';
     var noteTitle = '';
     var noteParent = '';
 
     var item = items[0];
-    noteParent = getParentItem(item);
+    noteParent = this.getParentItem(item);
     noteTitle = noteParent.getField("title");
     if (item && !item.isNote()) {
       Zotero.debug("Exporting a regular Zotero item");
@@ -103,20 +119,20 @@ ZoteroTrilium = {
     var style = Zotero.Styles.get('http://www.zotero.org/styles/apa');
     var cslEngine = style.getCiteProc('en-GB', 'html');
     noteContent += encodeURIComponent(Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, [noteParent], "html")) +
-      getZoteroLink(noteParent) + "<br/>" + getZoteroURI(noteParent);
+      this.getZoteroLink(noteParent) + "<br/>" + this.getZoteroURI(noteParent);
 
     Zotero.debug(noteContent);
     
 
-    const etapiToken = getPref('etapi_key');
-    const etapiUrl = getPref('etapi_url') + '/create-note';
-    const parentNote = getPref('parent_note_id');
+    const etapiToken = this.getPref('etapi-key');
+    const etapiUrl = this.getPref('etapi-url') + '/create-note';
+    const parentNote = this.getPref('parent-note-id');
 
     let rBody = `type=text&title=${noteTitle}&content=${noteContent}&parentNoteId=${parentNote}`;
 
     let rHeaders = { Authorization: `${etapiToken}`};
     let rOptions = { headers: rHeaders, body: rBody, timeout: 60000 };
-
+    Zotero.debug(etapiUrl);
     let xhr;
       try {
         xhr = await Zotero.HTTP.request('POST', etapiUrl, rOptions);

@@ -1,0 +1,20 @@
+<linkset>
+    <html:link rel="localization" href="zotero-trilium.ftl" />
+</linkset>
+<html:h2 data-l10n-id="zotero-trilium-options-label" />
+<groupbox id="id-zotero-trilium-groupbox" >
+          <label id="id-zotero-trilium-url-label" data-l10n-id="zotero-trilium-url-label" control="id-zotero-trilium-vault-path" />
+          <html:input type="text" id="zotero-trilium-url-string" preference="extensions.zotero-trilium.etapi-url"  />
+          <html:p data-l10n-id="zotero-trilium-url-description" />
+</groupbox>
+<groupbox id="id-zotero-trilium-groupbox" >
+          <label id="id-zotero-trilium-key-label" data-l10n-id="zotero-trilium-key-label" control="id-zotero-trilium-vault-path" />
+          <html:input type="text" id="zotero-trilium-key-string" preference="extensions.zotero-trilium.etapi-key"  />
+          <html:p data-l10n-id="zotero-trilium-key-description" />
+</groupbox>
+<groupbox id="id-zotero-trilium-groupbox" >
+          <label id="id-zotero-trilium-parent-label" data-l10n-id="zotero-trilium-parent-label" control="id-zotero-trilium-vault-path" />
+          <html:input type="text" id="zotero-trilium-parent-string" preference="extensions.zotero-trilium.parent-note-id"  />
+          <html:p data-l10n-id="zotero-trilium-parent-description" />
+
+</groupbox>
